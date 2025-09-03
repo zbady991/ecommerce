@@ -25,8 +25,8 @@ The project provides a full online shopping experience where customers can brows
 
 ## 🛠️ Technologies Used
 - **Frontend:** HTML5, CSS3, JavaScript  
-- **Backend:** Python (Flask/Django)  
-- **Database:** (Add the DB you used, e.g. MySQL, SQLite, PostgreSQL)  
+- **Backend:** Python (Flask)  
+- **Database:** (the DB with SQLite)  
 - **Version Control:** Git & GitHub  
 
 ---
