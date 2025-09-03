@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - E-Commerce{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Shopping Cart</h1>
+
+    {% if cart_items %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>
+                        <img src="{{ item.product.image_url or url_for('static', filename='images/placeholder.png') }}"
+                            alt="{{ item.product.name }}" width="50" class="me-2">
+                        {{ item.product.name }}
+                    </td>
+                    <td>${{ "%.2f"|format(item.product.price) }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+                    <td>
+                        <a href="{{ url_for('products.remove_from_cart', item_id=item.id) }}"
+                            class="btn btn-sm btn-danger">Remove</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                    <td><strong>${{ "%.2f"|format(total) }}</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="text-end mt-4">
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-outline-secondary me-2">Continue Shopping</a>
+        <a href="{{ url_for('orders.checkout') }}" class="btn btn-primary">Proceed to Checkout</a>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Your cart is empty. <a href="{{ url_for('products.product_list') }}">Start shopping</a>.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

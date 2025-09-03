@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-primary text-white py-5">
+    <div class="container text-center py-5">
+        <h1 class="display-4">Welcome to Our E-Commerce Store</h1>
+        <p class="lead">Discover amazing products at great prices</p>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-light btn-lg">Shop Now</a>
+    </div>
+</div>
+
+<!-- Categories Section -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Shop by Category</h2>
+    <div class="row g-4">
+        {% for category in categories %}
+        <div class="col-md-4">
+            <div class="card category-card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-{{ category.icon }} display-4 mb-3"></i>
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <p class="card-text text-muted">{{ category.description }}</p>
+                    <a href="{{ url_for('products.product_list', category=category.name) }}" class="btn btn-outline-primary">Browse</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Featured Products</h2>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-outline-primary">View All</a>
+    </div>
+    <div class="row">
+        {% for product in featured_products %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 product-card">
+                <div class="position-relative">
+                    {% if product.image_url %}
+                    <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="text-center p-3 bg-light" style="height: 200px;">
+                        <span class="text-muted">No image available</span>
+                    </div>
+                    {% endif %}
+                    {% if product.stock < 5 and product.stock > 0 %}
+                    <span class="badge bg-warning position-absolute top-0 end-0 m-2">Low Stock</span>
+                    {% elif product.stock == 0 %}
+                    <span class="badge bg-danger position-absolute top-0 end-0 m-2">Out of Stock</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description|truncate(100) }}</p>
+                    <p class="text-primary h5">${{ "%.2f"|format(product.price) }}</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="d-grid">
+                        <a href="{{ url_for('products.product_detail', product_id=product.id) }}" 
+                           class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Special Offers Section -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body p-4">
+                    <h3>Free Shipping</h3>
+                    <p>On orders over $50</p>
+                    <a href="{{ url_for('products.product_list') }}" class="btn btn-light">Shop Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card bg-success text-white">
+                <div class="card-body p-4">
+                    <h3>Special Discount</h3>
+                    <p>Get 10% off on your first order</p>
+                    <a href="{{ url_for('products.product_list') }}" class="btn btn-light">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Newsletter Section -->
+<div class="container mt-5 mb-5">
+    <div class="card bg-light">
+        <div class="card-body p-4 text-center">
+            <h3>Subscribe to Our Newsletter</h3>
+            <p class="text-muted">Stay updated with our latest products and offers</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form class="d-flex">
+                        <input type="email" class="form-control me-2" placeholder="Enter your email">
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+.hero-section {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/static/images/hero-bg.jpg') center/cover;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+</style>
+{% endblock %}

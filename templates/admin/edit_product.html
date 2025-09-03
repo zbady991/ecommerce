@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Edit Product</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required>{{ product.description }}</textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="price" class="form-label">Price ($)</label>
+                                <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="{{ product.price }}" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock" name="stock" min="0" value="{{ product.stock }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Discount Section -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">Discount Settings</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="discount_percent" class="form-label">Discount (%)</label>
+                                        <input type="number" class="form-control" id="discount_percent" name="discount_percent" 
+                                               min="0" max="100" step="0.1" value="{{ product.discount_percent or 0 }}">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="discount_start_date" class="form-label">Start Date</label>
+                                        <input type="datetime-local" class="form-control" id="discount_start_date" 
+                                               name="discount_start_date" value="{{ product.discount_start_date.strftime('%Y-%m-%dT%H:%M') if product.discount_start_date }}">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="discount_end_date" class="form-label">End Date</label>
+                                        <input type="datetime-local" class="form-control" id="discount_end_date" 
+                                               name="discount_end_date" value="{{ product.discount_end_date.strftime('%Y-%m-%dT%H:%M') if product.discount_end_date }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="category" name="category" value="{{ product.category }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Product Image</label>
+                            {% if product.image_url %}
+                            <div class="mb-2">
+                                <img src="{{ product.image_url }}" alt="{{ product.name }}" style="max-width: 200px; max-height: 200px;">
+                            </div>
+                            {% endif %}
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <small class="form-text text-muted">Leave empty to keep the current image</small>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('products.admin_products') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Update Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

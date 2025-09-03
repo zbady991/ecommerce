@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Products - E-Commerce{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h1>Our Products</h1>
+        </div>
+        <div class="col-md-6 text-end">
+            <form class="d-flex" action="{{ url_for('products.product_list') }}" method="GET">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search products..."
+                    value="{{ request.args.get('q', '') }}">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img src="{{ product.image_url or url_for('static', filename='images/placeholder.png') }}"
+                    class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description[:100] }}...</p>
+                    <div class="price-section mb-3">
+                        {% if product.has_active_discount %}
+                        <p class="mb-0">
+                            <span class="text-decoration-line-through text-muted">${{ "%.2f"|format(product.price) }}</span>
+                            <span class="text-danger fw-bold">${{ "%.2f"|format(product.discounted_price) }}</span>
+                            <span class="badge bg-danger">-{{ product.discount_percent }}%</span>
+                        </p>
+                        {% else %}
+                        <p class="mb-0 fw-bold">${{ "%.2f"|format(product.price) }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('products.product_detail', product_id=product.id) }}"
+                            class="btn btn-primary">View Details</a>
+                        {% if product.stock > 0 %}
+                        <span class="text-success">In Stock</span>
+                        {% else %}
+                        <span class="text-danger">Out of Stock</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
